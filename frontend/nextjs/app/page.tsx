@@ -117,7 +117,7 @@ export default function Home() {
 
         newSocket.onopen = () => {
           const { task, report_type, report_source, tone } = chatBoxSettings;
-          let data = "start " + JSON.stringify({ task: promptValue, report_type, report_source, tone, headers });
+          let data = "start " + JSON.stringify({ task: promptValue, report_type, report_source, tone, headers, report_tone: chatBoxSettings.tone, report_sources: chatBoxSettings.report_source });
           newSocket.send(data);
 
           // Start sending heartbeat messages every 30 seconds
@@ -133,7 +133,7 @@ export default function Home() {
       }
     } else {
       const { task, report_type, report_source, tone } = chatBoxSettings;
-      let data = "start " + JSON.stringify({ task: promptValue, report_type, report_source, tone, headers });
+      let data = "start " + JSON.stringify({ task: promptValue, report_type, report_source, tone, headers, report_tone: chatBoxSettings.tone, report_sources: chatBoxSettings.report_source });
       socket.send(data);
     }
   };

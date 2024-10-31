@@ -25,7 +25,9 @@ class DetailedReport:
         tone: Tone = Tone.Formal,
         websocket: WebSocket = None,
         subtopics: List[Dict] = [],
-        headers: Optional[Dict] = None
+        headers: Optional[Dict] = None,
+        report_tone: str = None,
+        report_sources: list = None
     ):
         self.query = query
         self.report_type = report_type
@@ -36,6 +38,8 @@ class DetailedReport:
         self.websocket = websocket
         self.subtopics = subtopics
         self.headers = headers or {}
+        self.report_tone = report_tone
+        self.report_sources = report_sources
 
         self.main_task_assistant = GPTResearcher(
             query=self.query,
@@ -45,7 +49,9 @@ class DetailedReport:
             config_path=self.config_path,
             tone=self.tone,
             websocket=self.websocket,
-            headers=self.headers
+            headers=self.headers,
+            report_tone=self.report_tone,
+            report_sources=self.report_sources
         )
         self.existing_headers: List[Dict] = []
         self.global_context: List[str] = []
@@ -105,6 +111,8 @@ class DetailedReport:
             agent=self.main_task_assistant.agent,
             role=self.main_task_assistant.role,
             tone=self.tone,
+            report_tone=self.report_tone,
+            report_sources=self.report_sources
         )
 
         subtopic_assistant.context = list(set(self.global_context))
