@@ -29,6 +29,8 @@ class ResearchRequest(BaseModel):
     task: str
     report_type: str
     agent: str
+    report_tone: str = None
+    report_sources: list = None
 
 
 class ConfigRequest(BaseModel):
@@ -147,7 +149,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @app.post("/api/initiate_research")
 async def initiate_research_endpoint(request: ResearchRequest):
-    return await initiate_research(request.task, request.report_type, request.agent)
+    return await initiate_research(request.task, request.report_type, request.agent, request.report_tone, request.report_sources)
 
 
 @app.get("/api/retrieve_results/{task_id}")
