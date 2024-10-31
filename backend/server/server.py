@@ -18,7 +18,8 @@ from backend.server.server_utils import (
     sanitize_filename, handle_start_command, handle_human_feedback,
     generate_report_files, send_file_paths, get_config_dict,
     update_environment_variables, handle_file_upload, handle_file_deletion,
-    execute_multi_agents, handle_websocket_communication, extract_command_data
+    execute_multi_agents, handle_websocket_communication, extract_command_data,
+    initiate_research, retrieve_results
 )
 
 # Models
@@ -142,3 +143,13 @@ async def websocket_endpoint(websocket: WebSocket):
         await handle_websocket_communication(websocket, manager)
     except WebSocketDisconnect:
         await manager.disconnect(websocket)
+
+
+@app.post("/api/initiate_research")
+async def initiate_research_endpoint(request: ResearchRequest):
+    return await initiate_research(request.task, request.report_type, request.agent)
+
+
+@app.get("/api/retrieve_results/{task_id}")
+async def retrieve_results_endpoint(task_id: str):
+    return await retrieve_results(task_id)
