@@ -6,8 +6,9 @@ import shutil
 from typing import Dict, List
 from fastapi.responses import JSONResponse
 from gpt_researcher.document.document import DocumentLoader
-# Add this import
 from backend.utils import write_md_to_pdf, write_md_to_word, write_text_to_md
+from backend.report_type.basic_report.basic_report import BasicReport
+from backend.report_type.detailed_report.detailed_report import DetailedReport
 
 
 def sanitize_filename(filename: str) -> str:
@@ -130,3 +131,20 @@ def extract_command_data(json_data: Dict) -> tuple:
         json_data.get("headers", {}),
         json_data.get("report_source")
     )
+
+
+async def initiate_research(task: str, report_type: str, agent: str) -> Dict[str, str]:
+    if report_type == "basic_report":
+        researcher = BasicReport(query=task, report_type=report_type, report_source="web", source_urls=[], tone="Objective", config_path="", websocket=None)
+    elif report_type == "detailed_report":
+        researcher = DetailedReport(query=task, report_type=report_type, report_source="web", source_urls=[], tone="Objective", config_path="", websocket=None)
+    else:
+        return {"error": "Invalid report type"}
+
+    report = await researcher.run()
+    return {"report": report}
+
+
+async def retrieve_results(task_id: str) -> Dict[str, str]:
+    # Placeholder implementation, replace with actual logic to retrieve results based on task_id
+    return {"task_id": task_id, "results": "Results for task_id: " + task_id}
