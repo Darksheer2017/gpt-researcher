@@ -16,7 +16,11 @@ class BasicReport:
         websocket: WebSocket,
         headers=None,
         report_tone: str = None,
-        report_sources: list = None
+        report_sources: list = None,
+        subtopics: list = None,
+        additional_context: str = None,
+        summary_length: int = None,
+        include_references: bool = False
     ):
         self.query = query
         self.report_type = report_type
@@ -28,6 +32,10 @@ class BasicReport:
         self.headers = headers or {}
         self.report_tone = report_tone
         self.report_sources = report_sources
+        self.subtopics = subtopics
+        self.additional_context = additional_context
+        self.summary_length = summary_length
+        self.include_references = include_references
 
     async def run(self):
         # Initialize researcher
@@ -41,7 +49,11 @@ class BasicReport:
             websocket=self.websocket,
             headers=self.headers,
             report_tone=self.report_tone,
-            report_sources=self.report_sources
+            report_sources=self.report_sources,
+            subtopics=self.subtopics,
+            additional_context=self.additional_context,
+            summary_length=self.summary_length,
+            include_references=self.include_references
         )
 
         await researcher.conduct_research()

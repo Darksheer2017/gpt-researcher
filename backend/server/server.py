@@ -31,6 +31,14 @@ class ResearchRequest(BaseModel):
     agent: str
     report_tone: str = None
     report_sources: list = None
+    source_urls: list = None
+    tone: str = None
+    config_path: str = None
+    headers: dict = None
+    subtopics: list = None
+    additional_context: str = None
+    summary_length: int = None
+    include_references: bool = False
 
 
 class ConfigRequest(BaseModel):
@@ -149,7 +157,12 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @app.post("/api/initiate_research")
 async def initiate_research_endpoint(request: ResearchRequest):
-    return await initiate_research(request.task, request.report_type, request.agent, request.report_tone, request.report_sources)
+    return await initiate_research(
+        request.task, request.report_type, request.agent, request.report_tone,
+        request.report_sources, request.source_urls, request.tone,
+        request.config_path, request.headers, request.subtopics,
+        request.additional_context, request.summary_length, request.include_references
+    )
 
 
 @app.get("/api/retrieve_results/{task_id}")
